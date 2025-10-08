@@ -4,8 +4,8 @@
     {
         if (!Directory.Exists("./pdfs"))
             Directory.CreateDirectory("./pdfs");
-        List<(string, string, string)> pdfs = XlsxLoader.Get_pdf_urls("C:/Users/SPAC-23/Documents/Opgaver/uge4/Data/GRI_2017_2020.xlsx");
-        List<Task<(string, string)>> tasks = [];
+        List<PdfPlacement> pdfs = [.. XlsxLoader.Get_pdf_urls("C:/Users/SPAC-23/Documents/Opgaver/uge4/Data/GRI_2017_2020.xlsx")];
+        List<Task<PdfResult>> tasks = [];
         FileDownloader downloader = new();
 
         for (int i = 0; i < pdfs.Count; i++)
@@ -14,9 +14,9 @@
             {
                 break;
             }
-            if (string.IsNullOrEmpty(pdfs[i].Item2))
+            if (string.IsNullOrEmpty(pdfs[i].Url))
                 continue;
-            tasks.Add(downloader.Download(pdfs[i].Item1, pdfs[i].Item2, pdfs[i].Item3));
+            tasks.Add(downloader.Download(pdfs[i]));
         }
 
         Task.WaitAll(tasks);

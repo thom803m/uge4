@@ -3,7 +3,7 @@ using DocumentFormat.OpenXml.Spreadsheet;
 
 partial class XlsxMaker
 {
-    public static bool Make_xlsx(IEnumerable<(string, string)> _results)
+    public static bool Make_xlsx(IEnumerable<PdfResult> _results)
     {
         try
         {
@@ -33,8 +33,8 @@ partial class XlsxMaker
             {
                 Console.WriteLine(results[i]);
                 Row row = new() { RowIndex = DocumentFormat.OpenXml.UInt32Value.FromUInt32((uint)(i+2)) };
-                row.Append(new Cell() { CellReference = "A" + (i+2), CellValue = new CellValue(results[i].Item1), DataType = CellValues.String });
-                row.Append(new Cell() { CellReference = "B" + (i+2), CellValue = new CellValue(results[i].Item2), DataType = CellValues.String });
+                row.Append(new Cell() { CellReference = "A" + (i+2), CellValue = new CellValue(results[i].Name), DataType = CellValues.String });
+                row.Append(new Cell() { CellReference = "B" + (i+2), CellValue = new CellValue(results[i].Outcome), DataType = CellValues.String });
                 sheetData.Append(row);
             }
 

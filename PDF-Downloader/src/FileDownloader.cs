@@ -7,42 +7,36 @@ class FileDownloader
         return "./pdfs/" + pdf_name + ".pdf";
     }
 
-    public async Task<(string, string)> Download(string saveLocation, string url, string alt_url)
+    public async Task<PdfResult> Download(PdfPlacement pdfPlacement)
     {
         try
         {
-            if (!url.StartsWith("http"))
-                return (saveLocation,"not a valid link");
-            Console.WriteLine("Trying {0} with url: {1}%", saveLocation, url);
-            using Stream downloadStream = await client.GetStreamAsync(url);
-            using Stream fileStream = new FileStream(Pdf_Path(saveLocation), FileMode.Create, FileAccess.Write);
+            if (!pdfPlacement.Url.StartsWith("http"))
+                return new PdfResult(pdfPlacement.Name,"not a valid link");
+            Console.WriteLine("Trying {0} with url: {1}%", pdfPlacement.Name, pdfPlacement.Url);
+            using Stream downloadStream = await client.GetStreamAsync(pdfPlacement.Url);
+            using Stream fileStream = new FileStream(Pdf_Path(pdfPlacement.Name), FileMode.Create, FileAccess.Write);
 
             await downloadStream.CopyToAsync(fileStream);
             await fileStream.FlushAsync();
             fileStream.Close();
 
-            return (saveLocation, saveLocation + " Downloaded Succesfully");
+            return new PdfResult(pdfPlacement.Name, pdfPlacement.Name + " Downloaded Succesfully");
         }
         catch (HttpRequestException e)
         {
-            if (alt_url != "")
+            if (pdfPlacement.Alt_url != "")
             {
                 Console.WriteLine("\nException Caught! Trying alt....");
-                (string, string) result = await Download(saveLocation, alt_url, "");
-                return (result.Item1, result.Item2 + " with alt url");
+                PdfResult result = await Download(new(pdfPlacement.Name, pdfPlacement.Alt_url, ""));
+                return new PdfResult(result.Name, result.Outcome + " with alt url");
             }
             else
             {
                 Console.WriteLine("\nException Caught!");
                 Console.WriteLine("Message :{0} ", e.Message);
-                return (saveLocation, "Failed to access: " + saveLocation);
+                return new PdfResult(pdfPlacement.Name, "Failed to access: " + pdfPlacement.Name);
             }
         }
-        // catch (Exception e)
-        // {
-        //         Console.WriteLine("\nBad url Exception Caught!");
-        //         Console.WriteLine("pdf :{0}, at url: {1}", saveLocation, url);
-        //         Console.WriteLine("Message :{0} ", e.Message);
-        // }
     }
 }

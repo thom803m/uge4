@@ -18,7 +18,7 @@ partial class XlsxLoader
             return string.Empty;
         return Remove_number().Replace(cell.CellReference!, "");
     }
-    static public List<(string, string, string)> Get_pdf_urls(string path)
+    static public IEnumerable<PdfPlacement> Get_pdf_urls(string path)
     {
         if (string.IsNullOrEmpty(path)) throw new Exception("No path");
         if (!File.Exists(path)) throw new Exception("No such File");
@@ -30,14 +30,14 @@ partial class XlsxLoader
 
         IEnumerable<Cell> headerRow = sheetData.Elements<Row>().First().Elements<Cell>();
 
-        List<(string, string, string)> pdfs_to_downloaded = [];
+        List<PdfPlacement> pdfs_to_downloaded = [];
 
         foreach (Row r in sheetData.Elements<Row>())
         {
             if (r.RowIndex != null && r.RowIndex.Value == 1)
                 continue;
             Console.Write("\rCurrent row: " + ((int)r.RowIndex!.Value));
-            (string, string, string) pdf_reference = ("","","");
+            PdfPlacement pdf_reference = new("","","");
             IEnumerable<Cell> cells = r.Elements<Cell>();
             foreach (Cell cell in cells)
             {
@@ -45,13 +45,13 @@ partial class XlsxLoader
                 switch (Get_colume_reference(cell))
                 {
                     case "A":
-                        pdf_reference.Item1 = GetCellValue(cell, workbookPart);
+                        pdf_reference.Name = GetCellValue(cell, workbookPart);
                         break;
                     case "AL":
-                        pdf_reference.Item2 = GetCellValue(cell, workbookPart);
+                        pdf_reference.Url = GetCellValue(cell, workbookPart);
                         break;
                     case "AM":
-                        pdf_reference.Item3 = GetCellValue(cell, workbookPart);
+                        pdf_reference.Alt_url = GetCellValue(cell, workbookPart);
                         break;
                     default:
                         break;
