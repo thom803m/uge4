@@ -24,25 +24,19 @@ partial class XlsxLoader
         if (!File.Exists(path)) throw new Exception("No such File");
 
         using SpreadsheetDocument doc = SpreadsheetDocument.Open(path, false);
-        WorkbookPart workbookPart = doc.WorkbookPart;
-        WorksheetPart worksheetPart = workbookPart.WorksheetParts.First();
+        WorkbookPart workbookPart = doc.WorkbookPart!;
+        WorksheetPart worksheetPart = workbookPart!.WorksheetParts.First();
         SheetData sheetData = worksheetPart.Worksheet.Elements<SheetData>().First();
 
         IEnumerable<Cell> headerRow = sheetData.Elements<Row>().First().Elements<Cell>();
 
         List<(string, string, string)> pdfs_to_downloaded = [];
-        (string, string, string) headerValues = ("", "", "");
-        // foreach (Cell cell in headerRow)
-        // {
-        //     Console.WriteLine($"Cell {cell.CellReference}: {GetCellValue(cell, workbookPart)}");
-        //     if (cell.InnerText == "BRnum") headerValues.Item1 = cell.CellReference;
-        // }
 
         foreach (Row r in sheetData.Elements<Row>())
         {
             if (r.RowIndex != null && r.RowIndex.Value == 1)
                 continue;
-            Console.Write("\rCurrent row: " + (int)r.RowIndex.Value);
+            Console.Write("\rCurrent row: " + ((int)r.RowIndex!.Value));
             (string, string, string) pdf_reference = ("","","");
             IEnumerable<Cell> cells = r.Elements<Cell>();
             foreach (Cell cell in cells)
