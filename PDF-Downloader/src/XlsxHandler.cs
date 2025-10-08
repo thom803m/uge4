@@ -1,9 +1,24 @@
+using System.Text.RegularExpressions;
 using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml.Spreadsheet;
 
-class XlsxHandler
+partial class XlsxLoader
 {
-    public List<(string, string, string)> Get_pdf_urls(string path)
+    static string GetCellValue(Cell cell, WorkbookPart workbookPart)
+    {
+        if (cell is null || cell.CellValue is null)
+            return string.Empty;
+        if (workbookPart is null || workbookPart.SharedStringTablePart is null)
+            return string.Empty;
+        return workbookPart.SharedStringTablePart.SharedStringTable.ElementAt(int.Parse(cell.CellValue.InnerText)).InnerText;
+    }
+    static string Get_colume_reference(Cell cell)
+    {
+        if (cell is null || cell?.CellReference is null)
+            return string.Empty;
+        return Remove_number().Replace(cell.CellReference!, "");
+    }
+    static public List<(string, string, string)> Get_pdf_urls(string path)
     {
         if (string.IsNullOrEmpty(path)) throw new Exception("No path");
         if (!File.Exists(path)) throw new Exception("No such File");
@@ -16,21 +31,44 @@ class XlsxHandler
         IEnumerable<Cell> headerRow = sheetData.Elements<Row>().First().Elements<Cell>();
 
         List<(string, string, string)> pdfs_to_downloaded = [];
-        (int, int, int) headerValues = (0,0,0);
-        for (Cell cell in headerRow)
-        {
-            if(cell.InnerText == "BRnum") headerValues.Item1
-        }
+        (string, string, string) headerValues = ("", "", "");
+        // foreach (Cell cell in headerRow)
+        // {
+        //     Console.WriteLine($"Cell {cell.CellReference}: {GetCellValue(cell, workbookPart)}");
+        //     if (cell.InnerText == "BRnum") headerValues.Item1 = cell.CellReference;
+        // }
 
         foreach (Row r in sheetData.Elements<Row>())
+        {
+            if (r.RowIndex != null && r.RowIndex.Value == 1)
+                continue;
+            Console.Write("\rCurrent row: " + (int)r.RowIndex.Value);
+            (string, string, string) pdf_reference = ("","","");
+            IEnumerable<Cell> cells = r.Elements<Cell>();
+            foreach (Cell cell in cells)
             {
-                IEnumerable<Cell> cells = r.Elements<Cell>();
-                foreach (Cell cell in cells)
+                // Console.WriteLine($"Cell {Get_colume_reference(cell)}: {GetCellValue(cell, workbookPart)}");
+                switch (Get_colume_reference(cell))
                 {
-                    cell.
+                    case "A":
+                        pdf_reference.Item1 = GetCellValue(cell, workbookPart);
+                        break;
+                    case "AL":
+                        pdf_reference.Item2 = GetCellValue(cell, workbookPart);
+                        break;
+                    case "AM":
+                        pdf_reference.Item3 = GetCellValue(cell, workbookPart);
+                        break;
+                    default:
+                        break;
                 }
             }
+            pdfs_to_downloaded.Add(pdf_reference);
+        }
 
-        
+        return pdfs_to_downloaded;
     }
+
+    [GeneratedRegex("[0-9]")]
+    private static partial Regex Remove_number();
 }
