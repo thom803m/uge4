@@ -1,10 +1,11 @@
-class FileDownloader
+class FileDownloader(string fileLocation)
 {
     private readonly HttpClient client = new();
+    private readonly string FileLocation = fileLocation;
 
-    static string Pdf_Path(string pdf_name)
+    string Pdf_Path(string pdf_name)
     {
-        return "./pdfs/" + pdf_name + ".pdf";
+        return $"./{FileLocation}/{pdf_name}.pdf";
     }
 
     public async Task<PdfResult> Download(PdfPlacement pdfPlacement)

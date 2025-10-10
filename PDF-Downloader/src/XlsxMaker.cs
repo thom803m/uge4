@@ -3,11 +3,11 @@ using DocumentFormat.OpenXml.Spreadsheet;
 
 partial class XlsxMaker
 {
-    public static bool Make_xlsx(IEnumerable<PdfResult> _results)
+    public static bool Make_xlsx(IEnumerable<PdfResult> _results, string folderName)
     {
         try
         {
-            using SpreadsheetDocument doc = SpreadsheetDocument.Create($"Metadata{DateTime.Now.ToString("yyyy-MM-dd")}.xlsx", DocumentFormat.OpenXml.SpreadsheetDocumentType.Workbook);
+            using SpreadsheetDocument doc = SpreadsheetDocument.Create($"{folderName}/Metadata{DateTime.Now.ToString("yyyy-MM-dd")}.xlsx", DocumentFormat.OpenXml.SpreadsheetDocumentType.Workbook);
             WorkbookPart workbookPart = doc.AddWorkbookPart();
             workbookPart.Workbook = new();
 

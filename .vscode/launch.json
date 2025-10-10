@@ -1,0 +1,19 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": ".NET Core Launch (PDF-Downloader)",
+            "type": "coreclr",
+            "request": "launch",
+            "preLaunchTask": "build",
+            "program": "${workspaceFolder}/PDF-Downloader/bin/Debug/net9.0/PDF-Downloader.dll",
+            "args": ["C:/Users/SPAC-23/Documents/Opgaver/uge4/Data/GRI_2017_2020.xlsx", "bin/Debug/net9.0/spdfLocation"],
+            "cwd": "${workspaceFolder}/PDF-Downloader",
+            "stopAtEntry": false,
+            "console": "integratedTerminal"
+        }
+    ]
+}

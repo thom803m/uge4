@@ -1,27 +1,35 @@
 ﻿class Program
 {
-    static void Main()
+    static void Main(string[] args)
     {
-        if (!Directory.Exists("./pdfs"))
-            Directory.CreateDirectory("./pdfs");
-        List<PdfPlacement> pdfs = [.. XlsxLoader.Get_pdf_urls("C:/Users/SPAC-23/Documents/Opgaver/uge4/Data/GRI_2017_2020.xlsx")];
-        List<Task<PdfResult>> tasks = [];
-        FileDownloader downloader = new();
+        if (args.Length == 0) { Console.WriteLine("Need at least a path to the excel sheet"); return; }
+        string folderName = "pdfs";
+        if (args.Length > 1)
+            folderName = args[1];
+        if (!Directory.Exists($"./{folderName}"))
+            Directory.CreateDirectory($"./{folderName}");
 
-        for (int i = 0; i < pdfs.Count; i++)
+        List<PdfPlacement> pdfs;
+        try { pdfs = [.. XlsxLoader.Get_pdf_urls(args[0])]; }
+        catch (Exception e)
         {
-            if (i > 10)
-            {
-                break;
-            }
-            if (string.IsNullOrEmpty(pdfs[i].Url))
+            Console.WriteLine("Could not open " + args[0]);
+            Console.WriteLine(e.Message);
+            return;
+        }
+
+        List<Task<PdfResult>> tasks = [];
+        foreach (PdfPlacement pdf in pdfs.Take(10))
+        {
+            FileDownloader downloader = new(folderName);
+            if (string.IsNullOrEmpty(pdf.Url))
                 continue;
-            tasks.Add(downloader.Download(pdfs[i]));
+            tasks.Add(downloader.Download(pdf));
         }
 
         Task.WaitAll(tasks);
         Console.WriteLine("Download done");
-        if (XlsxMaker.Make_xlsx(tasks.Select(t => t.Result)))
+        if (XlsxMaker.Make_xlsx(tasks.Select(t => t.Result), folderName))
         {
             Console.WriteLine("Metadata sheet created");
         }
