@@ -1,0 +1,37 @@
+@startuml Pdf-Downloader
+class PdfPlacement {
+    - Name: string
+    - Url: string
+    - Alt_url: string
+}
+
+class PdfResult {
+    - Name: string
+    - Outcome: string
+}
+
+class XlsxHandler {
+    + Get_pdf_urls(string): IEnumerable<PdfPlacement>
+}
+
+class XlsxMaker {
+    + Make_xlsx(IEnumerable<PdfResult>): bool
+}
+
+class FileDownloader {
+    + Download(PdfPlacement): PdfResult
+}
+
+class Program {
+    + main(args: String[]): void
+}
+
+Program "1" -- "1" XlsxHandler : Uses >
+Program "1" -- "*" FileDownloader : Uses >
+Program "1" -- "1" XlsxMaker : Uses >
+XlsxHandler "1" -- "*" PdfPlacement : Creates >
+FileDownloader "1" -- "1" PdfPlacement : Takes >
+FileDownloader "1" -- "1" PdfResult : Creates >
+XlsxMaker "1" -- "*" PdfResult : uses >
+
+@enduml

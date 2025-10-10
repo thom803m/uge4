@@ -10,7 +10,7 @@
             "request": "launch",
             "preLaunchTask": "build",
             "program": "${workspaceFolder}/PDF-Downloader/bin/Debug/net9.0/PDF-Downloader.dll",
-            "args": ["C:/Users/SPAC-23/Documents/Opgaver/uge4/Data/GRI_2017_2020.xlsx", "bin/Debug/net9.0/spdfLocation"],
+            "args": ["{workspaceFolder}/Data/GRI_2017_2020.xlsx", "bin/Debug/net9.0/spdfLocation"],
             "cwd": "${workspaceFolder}/PDF-Downloader",
             "stopAtEntry": false,
             "console": "integratedTerminal"
