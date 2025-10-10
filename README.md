@@ -14,8 +14,10 @@ An in-depth paragraph about your project and overview of use.
 
 ### Executing program
 
-* Project has vscode tasks for building
-* If launched with vscode then you will try to open ``Data\GRI_2017_2020.xlsx``
+* Project has vscode tasks for building.
+* First args is the location of the excel file with the pdfs.
+* Second args is optional, but allows you to rename the output folder (default "pdfs").
+* If launched with vscode then you will try to open ``Data\GRI_2017_2020.xlsx``.
 
 ## Authors
 
