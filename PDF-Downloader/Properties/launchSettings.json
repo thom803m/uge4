@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "PDF-Downloader": {
+      "commandName": "Project",
+      "commandLineArgs": "data/GRI_2017_2020.xlsx\r\n"
+    }
+  }
+}
