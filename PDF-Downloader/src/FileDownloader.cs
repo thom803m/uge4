@@ -1,11 +1,25 @@
-class FileDownloader(string fileLocation)
+public class FileDownloader
 {
-    private readonly HttpClient client = new();
-    private readonly string FileLocation = fileLocation;
+    private readonly HttpClient client;
+    private readonly string FileLocation;
 
-    string Pdf_Path(string pdf_name)
+    // Standard constructor til appen
+    public FileDownloader(string fileLocation)
     {
-        return $"./{FileLocation}/{pdf_name}.pdf";
+        FileLocation = fileLocation;
+        client = new HttpClient();
+    }
+
+    // Ny constructor til tests med HttpClient-injektion
+    public FileDownloader(string fileLocation, HttpClient httpClient)
+    {
+        FileLocation = fileLocation;
+        client = httpClient;
+    }
+
+    private string Pdf_Path(string pdf_name)
+    {
+        return $"{FileLocation}/{pdf_name}.pdf"; // Har fjernet "./" fordi FileLocation burde være et fuldt path til når der skal testes.
     }
 
     public async Task<PdfResult> Download(PdfPlacement pdfPlacement)
@@ -13,8 +27,10 @@ class FileDownloader(string fileLocation)
         try
         {
             if (!pdfPlacement.Url.StartsWith("http"))
-                return new PdfResult(pdfPlacement.Name,"not a valid link");
+                return new PdfResult(pdfPlacement.Name, "not a valid link");
+
             Console.WriteLine("Trying {0} with url: {1}%", pdfPlacement.Name, pdfPlacement.Url);
+
             using Stream downloadStream = await client.GetStreamAsync(pdfPlacement.Url);
             using Stream fileStream = new FileStream(Pdf_Path(pdfPlacement.Name), FileMode.Create, FileAccess.Write);
 
@@ -26,10 +42,10 @@ class FileDownloader(string fileLocation)
         }
         catch (HttpRequestException e)
         {
-            if (pdfPlacement.Alt_url != "")
+            if (!string.IsNullOrEmpty(pdfPlacement.Alt_url))
             {
                 Console.WriteLine("\nException Caught! Trying alt....");
-                PdfResult result = await Download(new(pdfPlacement.Name, pdfPlacement.Alt_url, ""));
+                PdfResult result = await Download(new PdfPlacement(pdfPlacement.Name, pdfPlacement.Alt_url, ""));
                 return new PdfResult(result.Name, result.Outcome + " with alt url");
             }
             else

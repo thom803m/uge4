@@ -2,9 +2,9 @@ using System.Text.RegularExpressions;
 using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml.Spreadsheet;
 
-partial class XlsxLoader
+public partial class XlsxLoader
 {
-    static string GetCellValue(Cell cell, WorkbookPart workbookPart)
+    public static string GetCellValue(Cell cell, WorkbookPart workbookPart)
     {
         if (cell is null || cell.CellValue is null)
             return string.Empty;
@@ -12,7 +12,7 @@ partial class XlsxLoader
             return string.Empty;
         return workbookPart.SharedStringTablePart.SharedStringTable.ElementAt(int.Parse(cell.CellValue.InnerText)).InnerText;
     }
-    static string Get_colume_reference(Cell cell)
+    public static string Get_colume_reference(Cell cell)
     {
         if (cell is null || cell?.CellReference is null)
             return string.Empty;

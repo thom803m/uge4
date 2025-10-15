@@ -5,6 +5,8 @@ VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PDF-Downloader", "PDF-Downloader\PDF-Downloader.csproj", "{9719EA73-D9CC-4239-B424-598E31419A4D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PDF-Downloader.Tests", "PDF-Downloader.Tests\PDF-Downloader.Tests.csproj", "{BC1714CA-2C38-48E0-9EFD-5C4BAA8D2265}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,8 +29,23 @@ Global
 		{9719EA73-D9CC-4239-B424-598E31419A4D}.Release|x64.Build.0 = Release|Any CPU
 		{9719EA73-D9CC-4239-B424-598E31419A4D}.Release|x86.ActiveCfg = Release|Any CPU
 		{9719EA73-D9CC-4239-B424-598E31419A4D}.Release|x86.Build.0 = Release|Any CPU
+		{BC1714CA-2C38-48E0-9EFD-5C4BAA8D2265}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BC1714CA-2C38-48E0-9EFD-5C4BAA8D2265}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BC1714CA-2C38-48E0-9EFD-5C4BAA8D2265}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{BC1714CA-2C38-48E0-9EFD-5C4BAA8D2265}.Debug|x64.Build.0 = Debug|Any CPU
+		{BC1714CA-2C38-48E0-9EFD-5C4BAA8D2265}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{BC1714CA-2C38-48E0-9EFD-5C4BAA8D2265}.Debug|x86.Build.0 = Debug|Any CPU
+		{BC1714CA-2C38-48E0-9EFD-5C4BAA8D2265}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BC1714CA-2C38-48E0-9EFD-5C4BAA8D2265}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BC1714CA-2C38-48E0-9EFD-5C4BAA8D2265}.Release|x64.ActiveCfg = Release|Any CPU
+		{BC1714CA-2C38-48E0-9EFD-5C4BAA8D2265}.Release|x64.Build.0 = Release|Any CPU
+		{BC1714CA-2C38-48E0-9EFD-5C4BAA8D2265}.Release|x86.ActiveCfg = Release|Any CPU
+		{BC1714CA-2C38-48E0-9EFD-5C4BAA8D2265}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {27850AFB-E327-4D56-907D-8BB8C0DE965D}
 	EndGlobalSection
 EndGlobal

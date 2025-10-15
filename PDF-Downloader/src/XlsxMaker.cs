@@ -1,7 +1,7 @@
 using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml.Spreadsheet;
 
-partial class XlsxMaker
+public partial class XlsxMaker
 {
     public static bool Make_xlsx(IEnumerable<PdfResult> _results, string folderName)
     {
