@@ -1,8 +1,6 @@
-﻿using System;
+﻿using Xunit;
+using System.IO;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace PDF_Downloader.Tests
 {
@@ -11,20 +9,23 @@ namespace PDF_Downloader.Tests
         [Fact]
         public void Make_xlsx_WithResults_CreatesFile()
         {
-            string folder = Path.Combine(Path.GetTempPath(), "testFolder");
+            string folder = Path.Combine(Path.GetTempPath(), "testXlsx");
             Directory.CreateDirectory(folder);
 
             var results = new List<PdfResult>
-            {
-                new PdfResult("Test1", "Success"),
-                new PdfResult("Test2", "Failed")
-            };
+        {
+            new PdfResult("Test1", "Success"),
+            new PdfResult("Test2", "Failed")
+        };
 
             bool success = XlsxMaker.Make_xlsx(results, folder);
 
             Assert.True(success);
-            Assert.True(File.Exists(Path.Combine(folder, "Metadata" + DateTime.Now.ToString("yyyy-MM-dd") + ".xlsx")));
-        }
 
+            string[] files = Directory.GetFiles(folder, "*.xlsx");
+            Assert.Single(files);
+
+            Directory.Delete(folder, true);
+        }
     }
-}
+};

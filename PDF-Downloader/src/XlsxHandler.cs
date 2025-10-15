@@ -4,19 +4,34 @@ using DocumentFormat.OpenXml.Spreadsheet;
 
 public partial class XlsxLoader
 {
-    public static string GetCellValue(Cell cell, WorkbookPart workbookPart)
+    static string GetCellValue(Cell cell, WorkbookPart workbookPart)
     {
-        if (cell is null || cell.CellValue is null)
+        if (cell == null || cell.CellValue == null)
             return string.Empty;
-        if (workbookPart is null || workbookPart.SharedStringTablePart is null)
-            return string.Empty;
-        return workbookPart.SharedStringTablePart.SharedStringTable.ElementAt(int.Parse(cell.CellValue.InnerText)).InnerText;
+
+        if (cell.DataType != null && cell.DataType.Value == CellValues.SharedString)
+        {
+            // Tjek at SharedStringTablePart eksisterer
+            if (workbookPart.SharedStringTablePart != null)
+            {
+                return workbookPart.SharedStringTablePart.SharedStringTable
+                    .ElementAt(int.Parse(cell.CellValue.InnerText)).InnerText;
+            }
+            else
+            {
+                return cell.CellValue.InnerText; // fallback hvis SharedStringTable mangler
+            }
+        }
+        else
+        {
+            return cell.CellValue.InnerText; // inline string
+        }
     }
     public static string Get_colume_reference(Cell cell)
     {
-        if (cell is null || cell?.CellReference is null)
+        if (cell == null || cell.CellReference == null)
             return string.Empty;
-        return Remove_number().Replace(cell.CellReference!, "");
+        return Remove_number().Replace(cell.CellReference, "");
     }
     static public IEnumerable<PdfPlacement> Get_pdf_urls(string path)
     {
