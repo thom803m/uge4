@@ -2,7 +2,7 @@
 using System.IO;
 using System.Collections.Generic;
 
-namespace PDF_Downloader.Tests
+namespace PDF_Downloader.Tests.UnitTests
 {
     public class XlsxMakerTests
     {

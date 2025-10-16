@@ -6,28 +6,20 @@ public partial class XlsxLoader
 {
     static string GetCellValue(Cell cell, WorkbookPart workbookPart)
     {
-        if (cell == null || cell.CellValue == null)
+        if (cell is null || cell.CellValue is null)
             return string.Empty;
 
-        if (cell.DataType != null && cell.DataType.Value == CellValues.SharedString)
+        if (cell.DataType != null && cell.DataType == CellValues.SharedString)
         {
-            // Tjek at SharedStringTablePart eksisterer
-            if (workbookPart.SharedStringTablePart != null)
-            {
-                return workbookPart.SharedStringTablePart.SharedStringTable
-                    .ElementAt(int.Parse(cell.CellValue.InnerText)).InnerText;
-            }
-            else
-            {
-                return cell.CellValue.InnerText; // fallback hvis SharedStringTable mangler
-            }
+            return workbookPart.SharedStringTablePart.SharedStringTable
+                .ElementAt(int.Parse(cell.CellValue.InnerText)).InnerText;
         }
         else
         {
-            return cell.CellValue.InnerText; // inline string
+            return cell.CellValue.Text;
         }
     }
-    public static string Get_colume_reference(Cell cell)
+    static string Get_colume_reference(Cell cell)
     {
         if (cell == null || cell.CellReference == null)
             return string.Empty;

@@ -5,7 +5,7 @@ using System.IO;
 using System.Linq;
 using Xunit;
 
-namespace PDF_Downloader.Tests
+namespace PDF_Downloader.Tests.UnitTests
 {
     public class XlsxLoaderTests
     {

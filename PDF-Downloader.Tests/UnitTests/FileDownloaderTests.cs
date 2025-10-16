@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using Xunit;
 using System.IO;
 
-namespace PDF_Downloader.Tests
+namespace PDF_Downloader.Tests.UnitTests
 {
     public class FileDownloaderTests
     {
