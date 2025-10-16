@@ -13,13 +13,13 @@ namespace PDF_Downloader.Tests.IntegrationTests
         [Fact]
         public async Task FullFlow_ExcelToMetadata_CreatesFilesSuccessfully()
         {
-            // 1️⃣ Opret midlertidig folder
+            // Create a temporary folder for the integration test
             string folder = Path.Combine(Path.GetTempPath(), "IntegrationTest");
             Directory.CreateDirectory(folder);
 
             try
             {
-                // 2️⃣ Lav test Excel-fil med én PDF
+                // Create a test Excel file with one PDF entry
                 string excelPath = Path.Combine(folder, "test.xlsx");
                 var pdfUrl = "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf";
 
@@ -28,10 +28,10 @@ namespace PDF_Downloader.Tests.IntegrationTests
                     new PdfPlacement("TestPdf", pdfUrl, "")
                 });
 
-                // 3️⃣ Hent PDF-lister fra XlsxLoader
+                // Load the list of PDFs from the Excel file using XlsxLoader
                 var pdfs = XlsxLoader.Get_pdf_urls(excelPath);
 
-                // 4️⃣ Download PDF’er
+                // Download PDFs asynchronously
                 var tasks = pdfs.Select(pdf =>
                 {
                     var downloader = new FileDownloader(folder);
@@ -40,17 +40,17 @@ namespace PDF_Downloader.Tests.IntegrationTests
 
                 await Task.WhenAll(tasks);
 
-                // 5️⃣ Lav metadata-XLSX
+                // Create metadata Excel file from downloaded PDF results
                 bool metadataCreated = XlsxMaker.Make_xlsx(tasks.Select(t => t.Result), folder);
 
-                // 6️⃣ Assert
+                // Assertions: ensure files are created correctly
                 Assert.True(metadataCreated);
                 Assert.True(File.Exists(Path.Combine(folder, "TestPdf.pdf")));
                 Assert.True(Directory.GetFiles(folder).Any(f => f.EndsWith(".xlsx")));
             }
             finally
             {
-                // 7️⃣ Cleanup: slet filer og mappe
+                // Cleanup: delete all files and the folder after test
                 foreach (var f in Directory.GetFiles(folder))
                     File.Delete(f);
 
@@ -60,7 +60,7 @@ namespace PDF_Downloader.Tests.IntegrationTests
         }
     }
 
-    // Helper til at oprette test Excel
+    // Helper class to create test Excel files
     public static class TestHelpers
     {
         public static void CreateTestExcel(string path, PdfPlacement[] pdfs)
@@ -71,7 +71,7 @@ namespace PDF_Downloader.Tests.IntegrationTests
             var worksheetPart = workbookPart.AddNewPart<WorksheetPart>();
             var sheetData = new SheetData();
 
-            // Header
+            // Create header row
             var headerRow = new Row() { RowIndex = 1 };
             headerRow.Append(
                 new Cell() { CellReference = "A1", CellValue = new CellValue("Name"), DataType = CellValues.String },
@@ -80,7 +80,7 @@ namespace PDF_Downloader.Tests.IntegrationTests
             );
             sheetData.Append(headerRow);
 
-            // Data
+            // Add data rows for each PDF
             int rowIndex = 2;
             foreach (var pdf in pdfs)
             {
@@ -94,8 +94,10 @@ namespace PDF_Downloader.Tests.IntegrationTests
                 rowIndex++;
             }
 
+            // Assign sheet data to the worksheet
             worksheetPart.Worksheet = new Worksheet(sheetData);
 
+            // Add the worksheet to the workbook
             var sheets = workbookPart.Workbook.AppendChild(new Sheets());
             sheets.Append(new Sheet()
             {
@@ -104,6 +106,7 @@ namespace PDF_Downloader.Tests.IntegrationTests
                 Name = "Sheet1"
             });
 
+            // Save the workbook
             workbookPart.Workbook.Save();
         }
     }
