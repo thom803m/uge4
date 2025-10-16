@@ -13,7 +13,7 @@
 
 ---
 
-## 2a. Test Environment
+## 2. Test Environment
 
 - **IDE:** Visual Studio 2022  
 - **.NET Version:** 9.0  
@@ -21,16 +21,6 @@
   - Moq (unit tests, mocking HttpClient)  
   - Xunit (test framework)  
   - DocumentFormat.OpenXml (Excel/XLSX)  
-
----
-
-## 2b. Test Data Setup
-
-- The integration and unit tests require the Excel file **GRI_2017_2020.xlsx**.  
-- Place the file in a folder named `data` in the root of the project, e.g.:  
-- Tests will reference this file automatically using its path: `./data/GRI_2017_2020.xlsx`.  
-- Make sure the `data` folder and file are included in your repository if sharing with others, or download the file separately and place it there.  
-- For integration tests, the program reads the first 10 PDF entries from this Excel file to download and create metadata.
 
 ---
 
@@ -110,7 +100,23 @@
 
 ---
 
-## 8. Conclusion
+## 8. Test Data Setup
+
+The integration tests require the Excel file **GRI_2017_2020.xlsx**.  
+
+1. Create a `data` folder in the root of the project if it does not exist:  
+
+2. Place the Excel file inside the `data` folder.  
+
+3. Add the following link in Markdown for easy access:
+
+[Download GRI_2017_2020.xlsx](./data/GRI_2017_2020.xlsx)
+
+> 💡 Note: On GitHub, clicking this link will allow you to download the file to your local machine.
+
+---
+
+## 9. Conclusion
 
 - All critical functionality is covered by tests  
 - Full flow Excel → PDF → Metadata works correctly  
