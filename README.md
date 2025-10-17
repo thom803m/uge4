@@ -110,7 +110,7 @@ The integration tests require the Excel file **GRI_2017_2020.xlsx**.
 
 3. Add the following link in Markdown for easy access:
 
-[Download GRI_2017_2020.xlsx](./data/GRI_2017_2020.xlsx)
+[Download GRI_2017_2020.xlsx](./PDF-Downloader/data/GRI_2017_2020.xlsx)
 
 > 💡 Note: On GitHub, clicking this link will allow you to download the file to your local machine.
 
